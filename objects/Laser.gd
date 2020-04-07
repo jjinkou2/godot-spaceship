@@ -13,7 +13,7 @@ func _on_VisibilityNotifier2D_viewport_exited(viewport):
 
 
 func _on_Laser_body_entered(body) -> void:
-	if (body.is_in_group("asteroids")):
+	if (!self.is_queued_for_deletion() && body.is_in_group("asteroids")):
 		print("asteroid hit")
 		body.call_deferred("explode")
 		get_parent().remove_child(self)
