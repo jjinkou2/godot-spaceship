@@ -10,7 +10,6 @@ radius = 45.8647
 [node name="Asteroid" type="RigidBody2D" groups=[
 "asteroids",
 ]]
-position = Vector2( 331, 167 )
 script = ExtResource( 3 )
 __meta__ = {
 "_edit_group_": true

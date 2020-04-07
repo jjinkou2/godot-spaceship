@@ -1,4 +1,8 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://assets/audio/sfx/ShipExplosion.wav" type="AudioStream" id=1]
+
+[sub_resource type="ShaderMaterial" id=1]
 
 [sub_resource type="Gradient" id=2]
 offsets = PoolRealArray( 0, 0.15, 0.4, 0.8, 1 )
@@ -40,11 +44,19 @@ scale_random = 0.5
 scale_curve = SubResource( 7 )
 color_ramp = SubResource( 3 )
 
-[node name="ParticlesAsteroidExplosion" type="Particles2D"]
+[node name="ParticlesPlayerExplosion" type="Particles2D"]
+material = SubResource( 1 )
 emitting = false
 amount = 40
 lifetime = 0.5
 one_shot = true
-explosiveness = 0.73
+explosiveness = 0.5
 randomness = 1.0
 process_material = SubResource( 8 )
+__meta__ = {
+"_editor_description_": ""
+}
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 1 )
+autoplay = true

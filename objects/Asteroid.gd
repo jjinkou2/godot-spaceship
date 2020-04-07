@@ -3,10 +3,18 @@ var asteroid_small_scene := load("res://objects/Asteroidsmall.tscn")
 var is_explode := false
 var rng = RandomNumberGenerator.new()
 var explosion_particles_scene := load("res://objects/ParticlesAsteroidExplosion.tscn")
-
-
+var score_value = 100
+var points_scored_scene = load("res://ui/PointsScored.tscn")
 
 signal explode
+signal score_changed
+
+func _spawn_score():
+	var points_scored = points_scored_scene.instance()
+
+	points_scored.get_node("Label").text = str(score_value)
+	points_scored.position = self.position
+	get_parent().add_child(points_scored)
 
 func _play_explosion_sound():
 	var explosion_sound = AudioStreamPlayer2D.new()
@@ -28,7 +36,9 @@ func explode():
 	is_explode = true
 	
 	emit_signal("explode")
+	emit_signal("score_changed",score_value)
 	
+	_spawn_score()
 	_explosion_particles()
 	_play_explosion_sound()
 	_spawn_asteroid_smalls(4)
@@ -38,9 +48,11 @@ func explode():
 func _ready() -> void:
 	var main_camera = get_node("/root/Game/MainCamera")
 	self.connect("explode", main_camera, "asteroid_exploded")
-
+	var label = get_tree().get_root().get_node("Game/GUI/MarginContainer/HBoxContainer/VBoxContainer/Score")
+	self.connect("score_changed", label, "update_score")
+	
 func _spawn_asteroid_smalls(num):
-	for i in range(num):
+	for _i in range(num):
 		_spawn_asteroid_small()
 
 func _spawn_asteroid_small():
@@ -63,5 +75,5 @@ func _randomize_trajectory(asteroid):
 	asteroid.linear_velocity = Vector2(lv_x * 400, lv_y * 400)
 	asteroid.linear_damp = 0
 	
-func _on_VisibilityNotifier2D_viewport_exited(viewport):
+func _on_VisibilityNotifier2D_viewport_exited(_viewport):
 	queue_free() 
